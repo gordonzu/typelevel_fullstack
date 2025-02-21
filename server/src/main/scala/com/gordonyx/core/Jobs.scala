@@ -39,7 +39,7 @@ class JobsLive[F[_]: Concurrent](transactor: Transactor[F]) extends Jobs[F] {
       .compile 
       .toList
 
-  override def create(job: Job): F[ju.UUID] =
+  override def create(job: Job): F[ju.UUID] = {
     sql"""
       INSERT INTO jobs(
         company,
@@ -67,6 +67,7 @@ class JobsLive[F[_]: Concurrent](transactor: Transactor[F]) extends Jobs[F] {
     """.update
       .withUniqueGeneratedKeys[UUID]("id")
       .transact(transactor)
+  }
 }
 
 object JobsLive {
